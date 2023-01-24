@@ -1,13 +1,13 @@
 import { collection, getDocs } from "firebase/firestore";
 import { useState, useEffect } from "react";
-import db from "./firebase/FirebaseConfig";
+import { firestore } from "./firebase/FirebaseConfig";
 function App() {
   const [data, setData] = useState([])
   console.log(data)
   useEffect(() => {
     const getData = async () => {
       let box = []
-      let FirebaseData = await getDocs(collection(db, "blogs"))
+      let FirebaseData = await getDocs(collection(firestore, "blogs"))
       FirebaseData.forEach(doc => {
         return box.push(doc.data())
       })
@@ -20,17 +20,7 @@ function App() {
 
   return (
     <div className="App">
-      <a href="admin">Admin Page</a>
-      <div>
-        {
-          data.map((doc, inx) => (
-            <div className="" key={inx}>
-              <h1>{doc.Title}</h1>
-              <h2>{doc.username}</h2>
-            </div>
-          ))
-        }
-      </div>
+      <h1>Hello</h1>
     </div>
   );
 }
