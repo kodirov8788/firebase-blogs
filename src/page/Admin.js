@@ -1,29 +1,28 @@
 import React from 'react'
 import './Admin.css'
 import { collection, addDoc } from "firebase/firestore";
+import { useNavigate } from 'react-router-dom';
 import db from '../firebase/FirebaseConfig'
-function Admin() {
 
+function Admin() {
+    const navigate = useNavigate()
     const SentBlog = async (e) => {
         e.preventDefault()
         let title = e.target[0].value
         let text = e.target[1].value
-        let blognumaber = Number(e.target[2].value)
-
-        if (title === "" || text === "" || blognumaber === 0) {
-
-            alert("joylarni toldir tvar")
-
+        let blogNumber = Number(e.target[2].value)
+        if (title === "" || text === "" || blogNumber === 0) {
+            alert("joylarni toldiringß")
         } else {
             await addDoc(collection(db, "blogs"), {
                 title,
                 text,
-                blognumaber
-
+                blogNumber
             });
             e.target[0].value = ""
             e.target[1].value = ""
             e.target[2].value = ""
+            navigate("/")
         }
     }
 

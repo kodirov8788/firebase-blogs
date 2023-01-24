@@ -1,3 +1,6 @@
 /* @tailwind base;
 @tailwind components;
 @tailwind utilities; */
+.blog {
+    border: 2px solid black;
+}
