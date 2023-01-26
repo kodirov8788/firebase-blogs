@@ -1,10 +1,13 @@
-import React from 'react'
+import React, { useState } from 'react'
 import './Admin.css'
 import { collection, addDoc } from "firebase/firestore";
 import { useNavigate } from 'react-router-dom';
-import db from '../firebase/FirebaseConfig'
+import db, { storage } from '../firebase/FirebaseConfig'
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
 function Admin() {
+    const [ImageUpload, setImageUpload] = useState(null)
+    console.log(ImageUpload)
     const navigate = useNavigate()
     const SentBlog = async (e) => {
         e.preventDefault()
@@ -22,10 +25,43 @@ function Admin() {
             e.target[0].value = ""
             e.target[1].value = ""
             e.target[2].value = ""
+            UploadImage()
             navigate("/")
+
         }
     }
 
+
+    function UploadImage() {
+        const storageRef = ref(storage, `images/${ImageUpload.name}`);
+        const uploadTask = uploadBytesResumable(storageRef, ImageUpload);
+        uploadTask.on('state_changed',
+            (snapshot) => {
+                const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                console.log('Upload is ' + progress + '% done');
+                switch (snapshot.state) {
+                    case 'paused':
+                        console.log('Upload is paused');
+                        break;
+                    case 'running':
+                        console.log('Upload is running');
+                        break;
+                }
+            },
+            (error) => {
+                // Handle unsuccessful uploads
+            },
+            () => {
+
+                getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                    console.log('File available at', downloadURL);
+                });
+            }
+        );
+    }
+    const GetImage = (e) => {
+        setImageUpload(e.target.files[0])
+    }
     return (
         <form action="" onSubmit={SentBlog}>
             <label htmlFor="">Title</label>
@@ -34,6 +70,14 @@ function Admin() {
             <textarea name="" placeholder='Text...' id="" cols="30" rows="10"></textarea>
             <label htmlFor="">Blog Number</label>
             <input type="number" placeholder='Blog number...' />
+
+            <input className="custom-file-input" type="file" onChange={GetImage} />
+
+
+            <div className="input_file">
+                <input type="file" name="" id="" />
+            </div>
+
             <button>Add Blog</button>
         </form>
     )
