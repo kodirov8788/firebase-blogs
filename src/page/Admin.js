@@ -7,30 +7,49 @@ import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
 function Admin() {
     const [ImageUpload, setImageUpload] = useState(null)
+    const [ImgUrl, setImgUrl] = useState("")
     console.log(ImageUpload)
     const navigate = useNavigate()
+
     const SentBlog = async (e) => {
         e.preventDefault()
+
+        UploadImage()
+
         let title = e.target[0].value
         let text = e.target[1].value
         let blogNumber = Number(e.target[2].value)
-        if (title === "" || text === "" || blogNumber === 0) {
-            alert("joylarni toldiringß")
-        } else {
-            await addDoc(collection(db, "blogs"), {
-                title,
-                text,
-                blogNumber
-            });
-            e.target[0].value = ""
-            e.target[1].value = ""
-            e.target[2].value = ""
-            UploadImage()
-            navigate("/")
+        console.log(e.target)
 
-        }
+        await SendFirebase(title, text, blogNumber, ImgUrl)
+
+
+
+
     }
 
+    function SendFirebase(title, text, blogNumber) {
+
+        setTimeout(async function () {
+            if (title === "" || text === "" || blogNumber === 0 || ImgUrl === "") {
+                alert("joylarni toldiringß")
+            } else {
+                await addDoc(collection(db, "blogs"), {
+                    title,
+                    text,
+                    blogNumber,
+                    ImgUrl
+                });
+                // e.target[0].value = ""
+                // e.target[1].value = ""
+                // e.target[2].value = ""
+                navigate("/")
+
+            }
+        }, 3000)
+
+
+    }
 
     function UploadImage() {
         const storageRef = ref(storage, `images/${ImageUpload.name}`);
@@ -54,7 +73,7 @@ function Admin() {
             () => {
 
                 getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-                    console.log('File available at', downloadURL);
+                    setImgUrl(downloadURL);
                 });
             }
         );
