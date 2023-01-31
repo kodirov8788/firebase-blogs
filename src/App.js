@@ -41,6 +41,7 @@ function App() {
         {
           data.map((doc, inx) => (
             <div className="blog" key={inx}>
+              <img src={doc.data.image} alt="" />
               <h1>{doc.data.title}</h1>
               <p>{doc.data.text}</p>
               <h3>{doc.data.blogNumber}</h3>

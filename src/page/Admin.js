@@ -4,49 +4,37 @@ import { collection, addDoc } from "firebase/firestore";
 import { useNavigate } from 'react-router-dom';
 import db, { storage } from '../firebase/FirebaseConfig'
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { async } from '@firebase/util';
 
 function Admin() {
     const [ImageUpload, setImageUpload] = useState(null)
-    const [ImgUrl, setImgUrl] = useState("")
-    console.log(ImageUpload)
+    const [inputData, setInputData] = useState({
+        title: "",
+        text: "",
+        blogNumber: 0
+    })
+    console.log(inputData)
     const navigate = useNavigate()
 
     const SentBlog = async (e) => {
         e.preventDefault()
-
         UploadImage()
-
-        let title = e.target[0].value
-        let text = e.target[1].value
-        let blogNumber = Number(e.target[2].value)
-        console.log(e.target)
-
-        await SendFirebase(title, text, blogNumber, ImgUrl)
-
-
-
 
     }
 
-    function SendFirebase(title, text, blogNumber) {
+    async function SendFirebase(imgLink) {
+        if (inputData.title === "" || inputData.text === "" || inputData.blogNumber === 0) {
+            alert("joylarni toldiringß")
+        } else {
+            await addDoc(collection(db, "blogs"), {
+                title: inputData.title,
+                text: inputData.text,
+                blognumber: inputData.blogNumber,
+                image: imgLink
 
-        setTimeout(async function () {
-            if (title === "" || text === "" || blogNumber === 0 || ImgUrl === "") {
-                alert("joylarni toldiringß")
-            } else {
-                await addDoc(collection(db, "blogs"), {
-                    title,
-                    text,
-                    blogNumber,
-                    ImgUrl
-                });
-                // e.target[0].value = ""
-                // e.target[1].value = ""
-                // e.target[2].value = ""
-                navigate("/")
-
-            }
-        }, 3000)
+            });
+            navigate("/")
+        }
 
 
     }
@@ -72,8 +60,8 @@ function Admin() {
             },
             () => {
 
-                getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-                    setImgUrl(downloadURL);
+                getDownloadURL(uploadTask.snapshot.ref).then((imgLink) => {
+                    SendFirebase(imgLink)
                 });
             }
         );
@@ -84,11 +72,12 @@ function Admin() {
     return (
         <form action="" onSubmit={SentBlog}>
             <label htmlFor="">Title</label>
-            <input className='input' type="text" placeholder='Title...' />
+            <input onChange={(e) => setInputData({ ...inputData, title: e.target.value })} className='input' type="text" placeholder='Title...' />
+
             <label htmlFor="">Text</label>
-            <textarea name="" placeholder='Text...' id="" cols="30" rows="10"></textarea>
+            <textarea name="" onChange={(e) => setInputData({ ...inputData, text: e.target.value })} placeholder='Text...' id="" cols="30" rows="10"></textarea>
             <label htmlFor="">Blog Number</label>
-            <input type="number" placeholder='Blog number...' />
+            <input type="number" onChange={(e) => setInputData({ ...inputData, blogNumber: e.target.value })} placeholder='Blog number...' />
 
             <input className="custom-file-input" type="file" onChange={GetImage} />
 

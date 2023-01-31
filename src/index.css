@@ -36,3 +36,7 @@
 .custom-file-input {
     overflow: hidden;
 }
+
+img {
+    width: 200px;
+}
