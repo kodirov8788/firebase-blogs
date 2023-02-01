@@ -4,7 +4,6 @@ import { collection, addDoc } from "firebase/firestore";
 import { useNavigate } from 'react-router-dom';
 import db, { storage } from '../firebase/FirebaseConfig'
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { async } from '@firebase/util';
 
 function Admin() {
     const [ImageUpload, setImageUpload] = useState(null)
@@ -24,13 +23,14 @@ function Admin() {
 
     async function SendFirebase(imgLink) {
         if (inputData.title === "" || inputData.text === "" || inputData.blogNumber === 0) {
-            alert("joylarni toldiringß")
+            alert("joylarni toldiring!")
         } else {
             await addDoc(collection(db, "blogs"), {
                 title: inputData.title,
                 text: inputData.text,
                 blognumber: inputData.blogNumber,
-                image: imgLink
+                image: imgLink,
+                imgFileName: ImageUpload.name
 
             });
             navigate("/")
@@ -68,6 +68,7 @@ function Admin() {
     }
     const GetImage = (e) => {
         setImageUpload(e.target.files[0])
+        console.log(e.target.files[0])
     }
     return (
         <form action="" onSubmit={SentBlog}>
@@ -80,11 +81,6 @@ function Admin() {
             <input type="number" onChange={(e) => setInputData({ ...inputData, blogNumber: e.target.value })} placeholder='Blog number...' />
 
             <input className="custom-file-input" type="file" onChange={GetImage} />
-
-
-            <div className="input_file">
-                <input type="file" name="" id="" />
-            </div>
 
             <button>Add Blog</button>
         </form>

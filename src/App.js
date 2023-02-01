@@ -1,12 +1,14 @@
 import { collection, getDocs, doc, deleteDoc, updateDoc } from "firebase/firestore";
 import { useState, useEffect } from "react";
-import db from "./firebase/FirebaseConfig";
+import db, { storage } from "./firebase/FirebaseConfig";
+import { ref, deleteObject } from "firebase/storage";
+
 function App() {
   const [data, setData] = useState([])
 
   const [updateTitle, setUpdateTitle] = useState("")
 
-  console.log(data)
+  // console.log(data)
   useEffect(() => {
     const getData = async () => {
       let box = []
@@ -19,9 +21,13 @@ function App() {
     getData()
 
   }, [])
+  // console.log(first)
 
-  const deleteBlog = async (id) => {
-    await deleteDoc(doc(db, "blogs", id));
+
+  const deleteBlog = async (docs) => {
+    deleteStorageImage(docs.data.imgFileName)
+    await deleteDoc(doc(db, "blogs", docs.id));
+    // console.log(docs.data.imgFileName)
     window.location.reload()
   }
   const titleUpdate = async (id) => {
@@ -33,6 +39,17 @@ function App() {
     });
     window.location.reload()
 
+  }
+
+
+  const deleteStorageImage = async (imgDelete) => {
+    const desertRef = ref(storage, `images/${imgDelete}`);
+    console.log(imgDelete)
+    await deleteObject(desertRef).then((del) => {
+      console.log("del : ", del)
+    }).catch((error) => {
+      console.log("error chiqdi", error)
+    });
   }
   return (
     <div className="App">
@@ -51,7 +68,7 @@ function App() {
 
               <button onClick={() => titleUpdate(doc.id)}>Update Blog</button>
 
-              <button onClick={() => deleteBlog(doc.id)}>Delete blog</button>
+              <button onClick={() => deleteBlog(doc)}>Delete blog</button>
             </div>
           ))
         }
