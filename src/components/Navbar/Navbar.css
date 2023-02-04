@@ -1,0 +1,11 @@
+.Navbar {
+    width: 100%;
+    height: 100%;
+    background: dodgerblue;
+}
+
+.Navbar button {
+    width: 200px;
+    height: 30px;
+
+}

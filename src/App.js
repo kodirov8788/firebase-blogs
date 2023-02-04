@@ -1,12 +1,19 @@
 import { collection, getDocs, doc, deleteDoc, updateDoc } from "firebase/firestore";
-import { useState, useEffect } from "react";
-import db, { storage } from "./firebase/FirebaseConfig";
+import { useState, useEffect, useContext } from "react";
+import db, { auth, storage } from "./firebase/FirebaseConfig";
 import { ref, deleteObject } from "firebase/storage";
+import Navbar from "./components/Navbar/Navbar";
+
+import { AuthContext } from "./context/AuthContext";
 
 function App() {
+  const { Name, getAdmin } = useContext(AuthContext)
+  console.log(getAdmin)
   const [data, setData] = useState([])
-
   const [updateTitle, setUpdateTitle] = useState("")
+
+
+
 
   // console.log(data)
   useEffect(() => {
@@ -22,7 +29,6 @@ function App() {
 
   }, [])
   // console.log(first)
-
 
   const deleteBlog = async (docs) => {
     deleteStorageImage(docs.data.imgFileName)
@@ -53,6 +59,7 @@ function App() {
   }
   return (
     <div className="App">
+      <Navbar />
       <a href="admin">Admin Page</a>
       <div>
         {
