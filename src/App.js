@@ -7,7 +7,7 @@ import Navbar from "./components/Navbar/Navbar";
 import { AuthContext } from "./context/AuthContext";
 function App() {
   const { getAdmin } = useContext(AuthContext)
-  console.log(getAdmin)
+  // console.log(getAdmin)
   const [data, setData] = useState([])
   const [updateTitle, setUpdateTitle] = useState("")
 
