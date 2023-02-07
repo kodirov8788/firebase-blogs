@@ -1,14 +1,17 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import "./Navbar.css"
 import { GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth"
 import { auth } from '../../firebase/FirebaseConfig'
+import { AuthContext } from '../../context/AuthContext'
 function Navbar() {
+
+    const { getAdmin } = useContext(AuthContext)
+
     const [googleData, setGoogleData] = useState({
         Name: "",
         Email: "",
         Img: "",
     })
-    // console.log(googleData)
     const provider = new GoogleAuthProvider()
     const SignInWithGoogle = () => {
         signInWithPopup(auth, provider).then(res => {
@@ -17,8 +20,6 @@ function Navbar() {
             err => console.log("internet topilmadi.")
         )
     }
-
-
     const SIGNOUT = () => {
         signOut(auth)
         window.location.reload()
@@ -34,6 +35,8 @@ function Navbar() {
 
             {localStorage.getItem("Email") === "" ? <button onClick={SignInWithGoogle}>Googledan ro'yxatdan o'tish</button> :
                 <button onClick={SIGNOUT} >Sign Out</button>}
+
+            {getAdmin ? <a href="/admin">Admin</a> : ""}
         </div>
     )
 }

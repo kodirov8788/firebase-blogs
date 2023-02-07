@@ -55,7 +55,7 @@ function App() {
   return (
     <div className="App">
       <Navbar />
-      <a href="admin">Admin Page</a>
+      {/* <a href="admin">Admin Page</a> */}
       <div className="blog_wrap">
         {
           data.map((doc, inx) => (
@@ -84,6 +84,8 @@ function App() {
           ))
         }
       </div>
+
+
     </div>
   );
 }
