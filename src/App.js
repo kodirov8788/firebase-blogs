@@ -5,17 +5,12 @@ import { ref, deleteObject } from "firebase/storage";
 import Navbar from "./components/Navbar/Navbar";
 
 import { AuthContext } from "./context/AuthContext";
-
 function App() {
-  const { Name, getAdmin } = useContext(AuthContext)
+  const { getAdmin } = useContext(AuthContext)
   console.log(getAdmin)
   const [data, setData] = useState([])
   const [updateTitle, setUpdateTitle] = useState("")
 
-
-
-
-  // console.log(data)
   useEffect(() => {
     const getData = async () => {
       let box = []
@@ -61,7 +56,7 @@ function App() {
     <div className="App">
       <Navbar />
       <a href="admin">Admin Page</a>
-      <div>
+      <div className="blog_wrap">
         {
           data.map((doc, inx) => (
             <div className="blog" key={inx}>
@@ -69,13 +64,22 @@ function App() {
               <h1>{doc.data.title}</h1>
               <p>{doc.data.text}</p>
               <h3>{doc.data.blogNumber}</h3>
+              {
+                getAdmin === true ? <div className="admin">
+                  <input type="text" placeholder="update title"
+                    onChange={(e) => setUpdateTitle(e.target.value)} />
+                  <button onClick={() => titleUpdate(doc.id)}>Update Blog</button>
+                  <button onClick={() => deleteBlog(doc)}>Delete blog</button>
+                </div>
+                  :
+                  <div className="user">
+                    <button>Add to Cart</button>
+                    <button >Like</button>
+                  </div>
+              }
 
-              <input type="text" placeholder="update title"
-                onChange={(e) => setUpdateTitle(e.target.value)} />
 
-              <button onClick={() => titleUpdate(doc.id)}>Update Blog</button>
 
-              <button onClick={() => deleteBlog(doc)}>Delete blog</button>
             </div>
           ))
         }

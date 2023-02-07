@@ -3,6 +3,8 @@ import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore"
 import { getStorage } from "firebase/storage"
 import { getAuth } from "firebase/auth"
+// require('dotenv').config()
+// import Dotenv from "dotenv"
 const firebaseConfig = {
     apiKey: "AIzaSyBElulC3APzC5Wul5biC8uDdDFUDO7wohM",
     authDomain: "first-app-49ce8.firebaseapp.com",

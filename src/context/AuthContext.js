@@ -6,7 +6,7 @@ export const AuthContext = createContext()
 
 export const AuthProvider = ({ children }) => {
     const [getAdmin, setAdmin] = useState(false)
-    let ADMIN = "kodirov8788@gmail.com"
+    let ADMIN = "kodirov8788@gmail.com" || "ahmadbekusmanov2000@gmail.com"
     useEffect(() => {
         onAuthStateChanged(auth, (user) => {
             if (user?.email === ADMIN) {
@@ -14,11 +14,8 @@ export const AuthProvider = ({ children }) => {
             } else {
                 setAdmin(false)
             }
-
-
             if (user) {
                 console.log('auth change : ', user)
-
                 localStorage.setItem("Name", user.displayName)
                 localStorage.setItem("Email", user.email)
                 localStorage.setItem("Img", user.photoURL)

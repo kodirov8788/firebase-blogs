@@ -7,6 +7,8 @@
 
 .blog {
     border: 2px solid black;
+    width: fit-content;
+    margin: 10px;
 }
 
 .custom-file-input::-webkit-file-upload-button {
@@ -43,4 +45,9 @@
 
 img {
     width: 200px;
+}
+
+.blog_wrap {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
 }
